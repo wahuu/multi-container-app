@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-spring-data-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: rest-spring-data
+  template:
+    metadata:
+      labels:
+        component: rest-spring-data
+    spec:
+      containers:
+        - name: rest-spring-data
+          image: wahuu/booking-rest-spring-data
+          ports:
+            - containerPort: 8080
