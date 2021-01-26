@@ -17,3 +17,17 @@ spec:
           image: wahuu/booking-rest-spring-data
           ports:
             - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: postgres-service
+            - name: DB_USERNAME
+              value: postgres
+            - name: DB_PORT
+              value: '5432'
+            - name: DB_NAME
+              value: postgres
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD
