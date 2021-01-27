@@ -1,7 +1,6 @@
-FROM maven:3.6-jdk-8
+FROM openjdk:8
 
 WORKDIR /app
-COPY ./ ./
-RUN mvn package
+COPY ./target/rest-spring-data-0.0.1-SNAPSHOT.jar ./
 
-CMD ["java", "-jar", "target/rest-spring-data-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "rest-spring-data-0.0.1-SNAPSHOT.jar"]
