@@ -2,51 +2,50 @@ package com.wahuu.restspringdata.service;
 
 import com.wahuu.restspringdata.exceptions.HotelNotExistsException;
 import com.wahuu.restspringdata.model.Hotel;
+import com.wahuu.restspringdata.repositories.HotelRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class HotelService {
 
-    private List<Hotel> tempHotelsStore = new ArrayList<>();
+    @Autowired
+    private HotelRepository hotelRepository;
 
     public List<Hotel> getAllHotels() {
-        return tempHotelsStore;
+        return hotelRepository.findAll();
+    }
+
+    public Hotel getHotelById(Long id){
+        return hotelRepository
+                .findById(id)
+                .orElseThrow(()-> new HotelNotExistsException(String.format("Cannot find hotel by id %s", id)));
     }
 
     public Hotel getHotelByName(String name) throws RuntimeException {
-        return tempHotelsStore
+        return hotelRepository
+                .findByName(name)
                 .stream()
-                .filter(h -> h.getName().equalsIgnoreCase(name)).findFirst()
-                .orElseThrow(() -> new HotelNotExistsException("Cannot find hotel by name"));
+                .findFirst()
+                .orElseThrow(()-> new HotelNotExistsException(String.format("Cannot find hotel by name %s", name)));
     }
 
     public Long addHotel(Hotel hotel) {
-        hotel.setId(1L);
-        tempHotelsStore.add(hotel);
-        return hotel.getId();
+        hotel.setId(null);
+        Hotel save = hotelRepository.save(hotel);
+        return save.getId();
     }
 
     public Hotel updateHotel(Hotel hotel, Long id) {
-        Hotel hotelById = tempHotelsStore
-                .stream()
-                .filter(h -> h.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Cannot find hotel by id"));
-        hotel.setId(id);
-        tempHotelsStore.remove(hotelById);
-        tempHotelsStore.add(hotel);
-        return hotel;
+        Hotel hotelById = getHotelById(id);
+        hotel.setId(hotelById.getId());
+        return hotelRepository.save(hotel);
     }
 
     public void deleteHotel(Long id) {
-        Hotel hotel = tempHotelsStore
-                .stream()
-                .filter(h -> h.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Cannot find hotel by id"));
-        tempHotelsStore.remove(hotel);
+        Hotel hotelById = getHotelById(id);
+        hotelRepository.delete(hotelById);
     }
 }
