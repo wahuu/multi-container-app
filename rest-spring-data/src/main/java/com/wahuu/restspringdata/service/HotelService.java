@@ -18,10 +18,10 @@ public class HotelService {
         return hotelRepository.findAll();
     }
 
-    public Hotel getHotelById(Long id){
+    public Hotel getHotelById(Long id) {
         return hotelRepository
                 .findById(id)
-                .orElseThrow(()-> new HotelNotExistsException(String.format("Cannot find hotel by id %s", id)));
+                .orElseThrow(() -> new HotelNotExistsException(String.format("Cannot find hotel by id %s", id)));
     }
 
     public Hotel getHotelByName(String name) throws RuntimeException {
@@ -29,7 +29,7 @@ public class HotelService {
                 .findByName(name)
                 .stream()
                 .findFirst()
-                .orElseThrow(()-> new HotelNotExistsException(String.format("Cannot find hotel by name %s", name)));
+                .orElseThrow(() -> new HotelNotExistsException(String.format("Cannot find hotel by name %s", name)));
     }
 
     public Long addHotel(Hotel hotel) {
