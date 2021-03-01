@@ -4,6 +4,7 @@ import com.wahuu.restspringdata.exceptions.HotelNotExistsException;
 import com.wahuu.restspringdata.model.Hotel;
 import com.wahuu.restspringdata.repositories.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public class HotelService {
 
     @Autowired
     private HotelRepository hotelRepository;
+
+    @Autowired
+    private ProducerService producerService;
 
     public List<Hotel> getAllHotels() {
         return hotelRepository.findAll();
@@ -35,6 +39,7 @@ public class HotelService {
     public Long addHotel(Hotel hotel) {
         hotel.setId(null);
         Hotel save = hotelRepository.save(hotel);
+        producerService.sendMessage(save);
         return save.getId();
     }
 

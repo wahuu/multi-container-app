@@ -77,4 +77,16 @@ public class Hotel {
     public void setStars(Integer stars) {
         this.stars = stars;
     }
+
+    @Override
+    public String toString() {
+        return "Hotel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", street='" + street + '\'' +
+                ", number='" + number + '\'' +
+                ", city='" + city + '\'' +
+                ", stars=" + stars +
+                '}';
+    }
 }
